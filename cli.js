@@ -5,7 +5,7 @@ const path = require('path');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 
-const INSTRUCTIONS_FILE = 'Instructions.md';
+const RULES_FILE = 'Rules.md';
 const SYMLINK_OPTIONS = [
   { name: 'GEMINI.md', value: 'GEMINI.md' },
   { name: 'CLAUDE.md', value: 'CLAUDE.md' },
@@ -15,10 +15,10 @@ const SYMLINK_OPTIONS = [
   { name: '.windsurfrules', value: '.windsurfrules' }
 ];
 
-const DEFAULT_INSTRUCTIONS = `# AI Agent Instructions
+const DEFAULT_RULES = `# AI Agent Rules
 
 ## Overview
-This document contains the main instructions for AI agents working on this project.
+This document contains the main rules for AI agents working on this project.
 
 ## General Guidelines
 - Follow best practices for code quality and maintainability
@@ -27,8 +27,8 @@ This document contains the main instructions for AI agents working on this proje
 - Use consistent coding style throughout the project
 - Test your code thoroughly before committing
 
-## Project-Specific Instructions
-[Add your project-specific instructions here]
+## Project-Specific Rules
+[Add your project-specific rules here]
 
 ## Code Style
 - Use meaningful variable and function names
@@ -42,11 +42,11 @@ This document contains the main instructions for AI agents working on this proje
 - Report any potential issues or improvements
 `;
 
-async function checkAndCreateInstructions() {
-  if (!fs.existsSync(INSTRUCTIONS_FILE)) {
-    console.log(chalk.yellow('Creating Instructions.md with default content...'));
-    fs.writeFileSync(INSTRUCTIONS_FILE, DEFAULT_INSTRUCTIONS);
-    console.log(chalk.green('✓ Instructions.md created successfully'));
+async function checkAndCreateRules() {
+  if (!fs.existsSync(RULES_FILE)) {
+    console.log(chalk.yellow('Creating Rules.md with default content...'));
+    fs.writeFileSync(RULES_FILE, DEFAULT_RULES);
+    console.log(chalk.green('✓ Rules.md created successfully'));
     return true;
   }
   return false;
@@ -55,7 +55,7 @@ async function checkAndCreateInstructions() {
 async function createSymlinks(selectedFiles) {
   for (const file of selectedFiles) {
     const symlinkPath = path.resolve(file);
-    const targetPath = path.resolve(INSTRUCTIONS_FILE);
+    const targetPath = path.resolve(RULES_FILE);
     
     // Create directory if needed
     const dir = path.dirname(symlinkPath);
@@ -72,7 +72,7 @@ async function createSymlinks(selectedFiles) {
       // Create relative symlink
       const relativePath = path.relative(dir, targetPath);
       fs.symlinkSync(relativePath, symlinkPath);
-      console.log(chalk.green(`✓ Created symlink: ${file} → ${INSTRUCTIONS_FILE}`));
+      console.log(chalk.green(`✓ Created symlink: ${file} → ${RULES_FILE}`));
     } catch (error) {
       console.error(chalk.red(`✗ Failed to create symlink for ${file}: ${error.message}`));
     }
@@ -107,14 +107,22 @@ async function updateGitignore(files) {
 }
 
 async function main() {
-  console.log(chalk.blue.bold('\n🤖 AI Agent Instructions Generator\n'));
+  // Parse command line arguments
+  const args = process.argv.slice(2);
+  const skipPrompts = args.includes('-y') || args.includes('--yes');
   
-  const instructionsExists = fs.existsSync(INSTRUCTIONS_FILE);
+  console.log(chalk.blue.bold('\n🤖 AI Agent Rules Generator\n'));
   
-  if (instructionsExists) {
-    console.log(chalk.green('✓ Instructions.md already exists'));
+  if (skipPrompts) {
+    console.log(chalk.gray('Running with -y flag: using all defaults\n'));
+  }
+  
+  const rulesExists = fs.existsSync(RULES_FILE);
+  
+  if (rulesExists) {
+    console.log(chalk.green('✓ Rules.md already exists'));
   } else {
-    console.log(chalk.yellow('⚠ Instructions.md not found. It will be created after selection.'));
+    console.log(chalk.yellow('⚠ Rules.md not found. It will be created after selection.'));
   }
   
   console.log(chalk.cyan('\nChecking existing symlinks...'));
@@ -126,9 +134,9 @@ async function main() {
         const stats = fs.lstatSync(option.value);
         if (stats.isSymbolicLink()) {
           const target = fs.readlinkSync(option.value);
-          if (target.includes(INSTRUCTIONS_FILE) || path.resolve(path.dirname(option.value), target) === path.resolve(INSTRUCTIONS_FILE)) {
+          if (target.includes(RULES_FILE) || path.resolve(path.dirname(option.value), target) === path.resolve(RULES_FILE)) {
             existingSymlinks.push(option.value);
-            console.log(chalk.gray(`  ${option.value} → ${INSTRUCTIONS_FILE}`));
+            console.log(chalk.gray(`  ${option.value} → ${RULES_FILE}`));
           }
         }
       } catch (error) {
@@ -141,35 +149,47 @@ async function main() {
     console.log(chalk.gray('  No existing symlinks found'));
   }
   
-  const { selectedFiles } = await inquirer.prompt([
-    {
-      type: 'checkbox',
-      name: 'selectedFiles',
-      message: 'Select files to link to Instructions.md (use space to toggle, enter to confirm):',
-      choices: SYMLINK_OPTIONS.map(option => ({
-        ...option,
-        checked: true 
-      }))
-    }
-  ]);
+  let selectedFiles;
+  let addToGitignore;
   
-  if (selectedFiles.length === 0) {
-    console.log(chalk.yellow('\nNo files selected. Exiting...'));
-    process.exit(0);
+  if (skipPrompts) {
+    // Use all files and add to gitignore by default
+    selectedFiles = SYMLINK_OPTIONS.map(option => option.value);
+    addToGitignore = true;
+    console.log(chalk.cyan('Selected all files for symlinking'));
+  } else {
+    const fileAnswer = await inquirer.prompt([
+      {
+        type: 'checkbox',
+        name: 'selectedFiles',
+        message: 'Select files to link to Rules.md (use space to toggle, enter to confirm):',
+        choices: SYMLINK_OPTIONS.map(option => ({
+          ...option,
+          checked: true 
+        }))
+      }
+    ]);
+    selectedFiles = fileAnswer.selectedFiles;
+    
+    if (selectedFiles.length === 0) {
+      console.log(chalk.yellow('\nNo files selected. Exiting...'));
+      process.exit(0);
+    }
+    
+    const gitignoreAnswer = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'addToGitignore',
+        message: 'Add symlink files to .gitignore?',
+        default: true
+      }
+    ]);
+    addToGitignore = gitignoreAnswer.addToGitignore;
   }
   
-  const { addToGitignore } = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'addToGitignore',
-      message: 'Add symlink files to .gitignore?',
-      default: true
-    }
-  ]);
-  
-  if (!instructionsExists) {
-    console.log(chalk.cyan('\nCreating Instructions.md...'));
-    const wasCreated = await checkAndCreateInstructions();
+  if (!rulesExists) {
+    console.log(chalk.cyan('\nCreating Rules.md...'));
+    const wasCreated = await checkAndCreateRules();
   }
   
   console.log(chalk.cyan('\nCreating symlinks...'));
@@ -180,8 +200,8 @@ async function main() {
     await updateGitignore(selectedFiles);
   }
   
-  console.log(chalk.green.bold('\n✨ Done! All selected files are now linked to Instructions.md'));
-  console.log(chalk.gray('Any changes to Instructions.md will be reflected in all linked files.\n'));
+  console.log(chalk.green.bold('\n✨ Done! All selected files are now linked to Rules.md'));
+  console.log(chalk.gray('Any changes to Rules.md will be reflected in all linked files.\n'));
 }
 
 // Run the CLI
