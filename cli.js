@@ -111,10 +111,25 @@ async function main() {
   const args = process.argv.slice(2);
   const skipPrompts = args.includes('-y') || args.includes('--yes');
   
-  console.log(chalk.blue.bold('\n🤖 AI Agent Rules Generator\n'));
+  // Display ASCII art and introduction
+  console.log(chalk.cyan(`
+    █████╗  ██████╗ ██████╗  ██████╗ 
+   ██╔══██╗██╔════╝ ██╔══██╗██╔════╝ 
+   ███████║██║  ███╗██████╔╝██║  ███╗
+   ██╔══██║██║   ██║██╔══██╗██║   ██║
+   ██║  ██║╚██████╔╝██║  ██║╚██████╔╝
+   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ 
+  `));
+  
+  console.log(chalk.blue.bold('  AI Agent Rules Generator\n'));
+  console.log(chalk.gray('  🎯 One source of truth for all your AI agents'));
+  console.log(chalk.gray('  📁 Automatically creates symlinks to:'));
+  console.log(chalk.gray('     • Claude, Gemini, GitHub Copilot'));
+  console.log(chalk.gray('     • Cursor, Cline, Windsurf'));
+  console.log(chalk.gray('  ⚡ Edit once, update everywhere\n'));
   
   if (skipPrompts) {
-    console.log(chalk.gray('Running with -y flag: using all defaults\n'));
+    console.log(chalk.yellow('  ⚡ Running with -y flag: using all defaults\n'));
   }
   
   const rulesExists = fs.existsSync(RULES_FILE);
@@ -125,7 +140,7 @@ async function main() {
     console.log(chalk.yellow('⚠ Rules.md not found. It will be created after selection.'));
   }
   
-  console.log(chalk.cyan('\nChecking existing symlinks...'));
+  console.log(chalk.cyan('📍 Checking existing symlinks...'));
   const existingSymlinks = [];
   
   for (const option of SYMLINK_OPTIONS) {
@@ -146,7 +161,7 @@ async function main() {
   }
   
   if (existingSymlinks.length === 0) {
-    console.log(chalk.gray('  No existing symlinks found'));
+    console.log(chalk.gray('  ➤ No existing symlinks found'));
   }
   
   let selectedFiles;
@@ -156,7 +171,7 @@ async function main() {
     // Use all files and add to gitignore by default
     selectedFiles = SYMLINK_OPTIONS.map(option => option.value);
     addToGitignore = true;
-    console.log(chalk.cyan('Selected all files for symlinking'));
+    console.log(chalk.cyan('\n✅ Selected all files for symlinking'));
   } else {
     const fileAnswer = await inquirer.prompt([
       {
@@ -188,20 +203,21 @@ async function main() {
   }
   
   if (!rulesExists) {
-    console.log(chalk.cyan('\nCreating Rules.md...'));
+    console.log(chalk.cyan('\n📝 Creating Rules.md...'));
     const wasCreated = await checkAndCreateRules();
   }
   
-  console.log(chalk.cyan('\nCreating symlinks...'));
+  console.log(chalk.cyan('\n🔗 Creating symlinks...'));
   await createSymlinks(selectedFiles);
   
   if (addToGitignore) {
-    console.log(chalk.cyan('\nUpdating .gitignore...'));
+    console.log(chalk.cyan('\n📄 Updating .gitignore...'));
     await updateGitignore(selectedFiles);
   }
   
   console.log(chalk.green.bold('\n✨ Done! All selected files are now linked to Rules.md'));
-  console.log(chalk.gray('Any changes to Rules.md will be reflected in all linked files.\n'));
+  console.log(chalk.gray('Any changes to Rules.md will be reflected in all linked files.'));
+  console.log(chalk.cyan('\n💡 Pro tip: Run `agrg -y` next time to skip all prompts!\n'));
 }
 
 // Run the CLI
