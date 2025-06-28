@@ -113,15 +113,15 @@ async function main() {
   
   // Display ASCII art and introduction
   console.log(chalk.cyan(`
-    █████╗  ██████╗ ██████╗  ██████╗ 
-   ██╔══██╗██╔════╝ ██╔══██╗██╔════╝ 
-   ███████║██║  ███╗██████╔╝██║  ███╗
-   ██╔══██║██║   ██║██╔══██╗██║   ██║
-   ██║  ██║╚██████╔╝██║  ██║╚██████╔╝
-   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ 
+    █████╗ ██╗██████╗ ██╗     ███╗   ██╗
+   ██╔══██╗██║██╔══██╗██║     ████╗  ██║
+   ███████║██║██████╔╝██║     ██╔██╗ ██║
+   ██╔══██║██║██╔══██╗██║     ██║╚██╗██║
+   ██║  ██║██║██║  ██║███████╗██║ ╚████║
+   ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝
   `));
   
-  console.log(chalk.blue.bold('  AI Agent Rules Generator\n'));
+  console.log(chalk.blue.bold('  AI Rules Link\n'));
   console.log(chalk.gray('  🎯 One source of truth for all your AI agents'));
   console.log(chalk.gray('  📁 Automatically creates symlinks to:'));
   console.log(chalk.gray('     • Claude, Gemini, GitHub Copilot'));
@@ -217,7 +217,7 @@ async function main() {
   
   console.log(chalk.green.bold('\n✨ Done! All selected files are now linked to Rules.md'));
   console.log(chalk.gray('Any changes to Rules.md will be reflected in all linked files.'));
-  console.log(chalk.cyan('\n💡 Pro tip: Run `agrg -y` next time to skip all prompts!\n'));
+  console.log(chalk.cyan('\n💡 Pro tip: Run `airln -y` next time to skip all prompts!\n'));
 }
 
 // Run the CLI

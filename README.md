@@ -1,21 +1,21 @@
-# AGRG - Dead simple AI Agent Rules Generator
+# AIRLN - Dead simple AI Rules Link
 
 <div align="center">
 
 ```
-    █████╗  ██████╗ ██████╗  ██████╗ 
-   ██╔══██╗██╔════╝ ██╔══██╗██╔════╝ 
-   ███████║██║  ███╗██████╔╝██║  ███╗
-   ██╔══██║██║   ██║██╔══██╗██║   ██║
-   ██║  ██║╚██████╔╝██║  ██║╚██████╔╝
-   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ 
+    █████╗ ██╗██████╗ ██╗     ███╗   ██╗
+   ██╔══██╗██║██╔══██╗██║     ████╗  ██║
+   ███████║██║██████╔╝██║     ██╔██╗ ██║
+   ██╔══██║██║██╔══██╗██║     ██║╚██╗██║
+   ██║  ██║██║██║  ██║███████╗██║ ╚████║
+   ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝
 ```
 
 **🎯 One source of truth for all your AI Agent rules**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2012.0.0-brightgreen)](https://nodejs.org)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nxnom/agrg/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nxnom/airln/pulls)
 
 </div>
 
@@ -25,7 +25,7 @@ Are you tired of maintaining separate instruction files for every AI code assist
 
 ## ✨ The Solution
 
-AGRG (AI Agent Rules Generator) solves this by creating a single `Rules.md` file that automatically syncs to all your AI agent configuration files through symbolic links. 
+AIRLN (AI Rules Link) solves this by creating a single `Rules.md` file that automatically syncs to all your AI agent configuration files through symbolic links. 
 
 **Edit once, update everywhere!**
 
@@ -34,14 +34,27 @@ AGRG (AI Agent Rules Generator) solves this by creating a single `Rules.md` file
 ### Installation
 
 ```bash
+# Install globally via npm
+npm install -g airln
+
+# Or using yarn
+yarn global add airln
+
+# Or run directly with npx (no installation needed)
+npx airln
+```
+
+#### Install from source
+
+```bash
 # Clone the repository
-git clone https://github.com/nxnom/agrg.git
-cd agrg
+git clone https://github.com/nxnom/airln.git
+cd airln
 
 # Install dependencies
 yarn install
 
-# Link globally (optional)
+# Link globally
 yarn link
 ```
 
@@ -49,10 +62,10 @@ yarn link
 
 ```bash
 # Interactive mode (recommended for first time)
-agrg
+airln
 
 # Skip all prompts and use defaults
-agrg -y
+airln -y
 ```
 
 ## 📸 Demo
@@ -100,7 +113,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🐛 Issues & Feature Requests
 
-Found a bug or have a feature request? Please [open an issue](https://github.com/nxnom/agrg/issues).
+Found a bug or have a feature request? Please [open an issue](https://github.com/nxnom/airln/issues).
 
 ---
 
