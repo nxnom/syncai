@@ -1,21 +1,21 @@
-# AIRLN - Dead simple AI Rules Link
+# SyncAI - Sync AI Rules Across All Your Dev Tools
 
 <div align="center">
 
 ```
-    █████╗ ██╗██████╗ ██╗     ███╗   ██╗
-   ██╔══██╗██║██╔══██╗██║     ████╗  ██║
-   ███████║██║██████╔╝██║     ██╔██╗ ██║
-   ██╔══██║██║██╔══██╗██║     ██║╚██╗██║
-   ██║  ██║██║██║  ██║███████╗██║ ╚████║
-   ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝
+   ███████╗██╗   ██╗███╗   ██╗ ██████╗     █████╗ ██╗
+   ██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝    ██╔══██╗██║
+   ███████╗ ╚████╔╝ ██╔██╗ ██║██║         ███████║██║
+   ╚════██║  ╚██╔╝  ██║╚██╗██║██║         ██╔══██║██║
+   ███████║   ██║   ██║ ╚████║╚██████╗    ██║  ██║██║
+   ╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝    ╚═╝  ╚═╝╚═╝
 ```
 
-**🎯 One source of truth for all your AI Agent rules**
+**🔄 Sync AI agent rules across all your development tools**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D%2012.0.0-brightgreen)](https://nodejs.org)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nxnom/airln/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/nxnom/syncai/pulls)
 
 </div>
 
@@ -25,7 +25,7 @@ Are you tired of maintaining separate instruction files for every AI code assist
 
 ## ✨ The Solution
 
-AIRLN (AI Rules Link) solves this by creating a single `Rules.md` file that automatically syncs to all your AI agent configuration files through symbolic links. 
+SyncAI solves this by creating a single `Rules.md` file that automatically syncs to all your AI agent configuration files through symbolic links. 
 
 **Edit once, update everywhere!**
 
@@ -35,21 +35,21 @@ AIRLN (AI Rules Link) solves this by creating a single `Rules.md` file that auto
 
 ```bash
 # Install globally via npm
-npm install -g airln
+npm install -g syncai
 
 # Or using yarn
-yarn global add airln
+yarn global add syncai
 
 # Or run directly with npx (no installation needed)
-npx airln
+npx syncai
 ```
 
 #### Install from source
 
 ```bash
 # Clone the repository
-git clone https://github.com/nxnom/airln.git
-cd airln
+git clone https://github.com/nxnom/syncai.git
+cd syncai
 
 # Install dependencies
 yarn install
@@ -62,10 +62,10 @@ yarn link
 
 ```bash
 # Interactive mode (recommended for first time)
-airln
+syncai
 
 # Skip all prompts and use defaults
-airln -y
+syncai -y
 ```
 
 ## 📸 Demo
@@ -113,7 +113,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 🐛 Issues & Feature Requests
 
-Found a bug or have a feature request? Please [open an issue](https://github.com/nxnom/airln/issues).
+Found a bug or have a feature request? Please [open an issue](https://github.com/nxnom/syncai/issues).
 
 ---
 

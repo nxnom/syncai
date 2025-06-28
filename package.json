@@ -1,10 +1,10 @@
 {
-  "name": "airln",
-  "version": "1.0.1",
-  "description": "Dead simple AI Agent Rules Generator. One source of truth for all your AI agent's rules.",
+  "name": "syncai",
+  "version": "1.0.0",
+  "description": "Sync AI agent rules across all your development tools. One source of truth for Claude, Copilot, Cursor & more.",
   "main": "cli.js",
   "bin": {
-    "airln": "./cli.js"
+    "syncai": "./cli.js"
   },
   "scripts": {
     "start": "node cli.js"
@@ -28,12 +28,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nxnom/airln.git"
+    "url": "git+https://github.com/nxnom/syncai.git"
   },
   "bugs": {
-    "url": "https://github.com/nxnom/airln/issues"
+    "url": "https://github.com/nxnom/syncai/issues"
   },
-  "homepage": "https://github.com/nxnom/airln#readme",
+  "homepage": "https://github.com/nxnom/syncai#readme",
   "engines": {
     "node": ">=12.0.0"
   },
