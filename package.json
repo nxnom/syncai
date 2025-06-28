@@ -1,0 +1,24 @@
+{
+  "name": "agrg",
+  "version": "1.0.0",
+  "description": "AI Agent Rules Generator. Sick of maintaining rules for every AI agent? This CLI tool symlinks your AI agent's instructions with a single source of truth, making it easy to manage and update.",
+  "main": "index.js",
+  "bin": {
+    "agrg": "./cli.js"
+  },
+  "scripts": {
+    "start": "node cli.js"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "instructions",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.6"
+  }
+}
