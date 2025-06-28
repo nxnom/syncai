@@ -12,7 +12,8 @@ const SYMLINK_OPTIONS = [
   { name: '.github/copilot-instructions.md', value: '.github/copilot-instructions.md' },
   { name: '.cursorrules', value: '.cursorrules' },
   { name: '.clinerules', value: '.clinerules' },
-  { name: '.windsurfrules', value: '.windsurfrules' }
+  { name: '.windsurfrules', value: '.windsurfrules' },
+  { name: '.trae/rules/project_rules.md', value: '.trae/rules/project_rules.md' }
 ];
 
 const DEFAULT_RULES = `# AI Agent Rules

@@ -1,6 +1,6 @@
 {
   "name": "syncai",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sync AI agent rules across all your development tools. One source of truth for Claude, Copilot, Cursor & more.",
   "main": "cli.js",
   "bin": {
