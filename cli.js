@@ -52,7 +52,7 @@ async function checkAndCreateRules() {
   return false;
 }
 
-async function createSymlinks(selectedFiles) {
+async function createSymlinks(selectedFiles, skipPrompts = false) {
   for (const file of selectedFiles) {
     const symlinkPath = path.resolve(file);
     const targetPath = path.resolve(RULES_FILE);
@@ -63,8 +63,28 @@ async function createSymlinks(selectedFiles) {
       fs.mkdirSync(dir, { recursive: true });
     }
     
-    // Remove existing file/symlink if it exists
+    // Check if file exists and is not a symlink
     if (fs.existsSync(symlinkPath)) {
+      const stats = fs.lstatSync(symlinkPath);
+      if (!stats.isSymbolicLink()) {
+        if (!skipPrompts) {
+          const { confirmReplace } = await inquirer.prompt([
+            {
+              type: 'confirm',
+              name: 'confirmReplace',
+              message: chalk.yellow(`⚠️  ${file} already exists and is NOT a symlink. Replace it? (WARNING: Data will be lost)`),
+              default: false
+            }
+          ]);
+          
+          if (!confirmReplace) {
+            console.log(chalk.gray(`  ⏭️  Skipped ${file}`));
+            continue;
+          }
+        } else {
+          console.log(chalk.yellow(`⚠️  Replacing existing file: ${file}`));
+        }
+      }
       fs.unlinkSync(symlinkPath);
     }
     
@@ -140,8 +160,9 @@ async function main() {
     console.log(chalk.yellow('⚠ Rules.md not found. It will be created after selection.'));
   }
   
-  console.log(chalk.cyan('📍 Checking existing symlinks...'));
+  console.log(chalk.cyan('📍 Checking existing files...'));
   const existingSymlinks = [];
+  const existingFiles = [];
   
   for (const option of SYMLINK_OPTIONS) {
     if (fs.existsSync(option.value)) {
@@ -151,17 +172,20 @@ async function main() {
           const target = fs.readlinkSync(option.value);
           if (target.includes(RULES_FILE) || path.resolve(path.dirname(option.value), target) === path.resolve(RULES_FILE)) {
             existingSymlinks.push(option.value);
-            console.log(chalk.gray(`  ${option.value} → ${RULES_FILE}`));
+            console.log(chalk.gray(`  ✓ ${option.value} → ${RULES_FILE} (symlink)`));
           }
+        } else {
+          existingFiles.push(option.value);
+          console.log(chalk.yellow(`  ⚠️  ${option.value} (regular file - will need confirmation to replace)`));
         }
       } catch (error) {
-        chalk.red(`✗ Error reading symlink ${option.value}: ${error.message}`);
+        console.error(chalk.red(`  ✗ Error reading ${option.value}: ${error.message}`));
       }
     }
   }
   
-  if (existingSymlinks.length === 0) {
-    console.log(chalk.gray('  ➤ No existing symlinks found'));
+  if (existingSymlinks.length === 0 && existingFiles.length === 0) {
+    console.log(chalk.gray('  ➤ No existing files found'));
   }
   
   let selectedFiles;
@@ -191,6 +215,14 @@ async function main() {
       process.exit(0);
     }
     
+    // Warn about files that will be replaced
+    const filesToReplace = selectedFiles.filter(file => existingFiles.includes(file));
+    if (filesToReplace.length > 0) {
+      console.log(chalk.red.bold('\n⚠️  WARNING: The following files already exist and are NOT symlinks:'));
+      filesToReplace.forEach(file => console.log(chalk.red(`   • ${file}`)));
+      console.log(chalk.yellow('   These files will be replaced and their contents will be LOST!'));
+    }
+    
     const gitignoreAnswer = await inquirer.prompt([
       {
         type: 'confirm',
@@ -208,7 +240,7 @@ async function main() {
   }
   
   console.log(chalk.cyan('\n🔗 Creating symlinks...'));
-  await createSymlinks(selectedFiles);
+  await createSymlinks(selectedFiles, skipPrompts);
   
   if (addToGitignore) {
     console.log(chalk.cyan('\n📄 Updating .gitignore...'));
